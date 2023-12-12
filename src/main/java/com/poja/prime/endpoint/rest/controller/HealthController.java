@@ -11,6 +11,8 @@ import com.poja.prime.repository.model.Dummy;
 import com.poja.prime.repository.model.DummyUuid;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import lombok.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,11 +47,28 @@ public class HealthController {
     Thread.sleep(20_000);
     return dummyUuidRepository.findById(randomUuid).map(DummyUuid::getId).orElseThrow();
   }
+
+  private final List<BigInteger> generatedPrimes = Collections.synchronizedList(new ArrayList<>());
   @GetMapping("/new-prime")
   public String generateNewPrime() {
     // Generate a probably prime number with 10,000 bits
     var prime = BigInteger.probablePrime(10000, new java.util.Random());
     // Ajoutez le nouveau nombre premier à la liste
+    addGeneratedPrime(prime);
     return prime.toString();
+  }
+
+  @GetMapping("/generated-primes")
+  public List<BigInteger> getGeneratedPrimes() {
+    return generatedPrimes;
+  }
+
+  // Méthode pour ajouter un nombre premier à la liste tout en conservant les 10 derniers
+  private void addGeneratedPrime(BigInteger prime) {
+    generatedPrimes.add(prime);
+    // Si la liste dépasse 10 éléments, supprimez le premier élément
+    if (generatedPrimes.size() > 10) {
+      generatedPrimes.remove(0);
+    }
   }
 }
