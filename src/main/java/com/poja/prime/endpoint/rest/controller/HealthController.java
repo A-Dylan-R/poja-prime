@@ -45,6 +45,7 @@ public class HealthController {
     Thread.sleep(20_000);
     return dummyUuidRepository.findById(randomUuid).map(DummyUuid::getId).orElseThrow();
   }
+
   @GetMapping("/new-prime")
   public String generateNewPrime() {
     // Generate a probably prime number with 10,000 bits
