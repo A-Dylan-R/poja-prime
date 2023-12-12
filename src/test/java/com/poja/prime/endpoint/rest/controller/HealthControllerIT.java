@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.poja.prime.conf.FacadeIT;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigInteger; 
 
 class HealthControllerIT extends FacadeIT {
 
@@ -20,5 +23,15 @@ class HealthControllerIT extends FacadeIT {
     var dummyTableEntries = healthController.dummyTable();
     assertEquals(1, dummyTableEntries.size());
     assertEquals("dummy-table-id-1", dummyTableEntries.get(0).getId());
+  }
+    @Test
+  void generateNewPrime() {
+    String primeString = healthController.generateNewPrime();
+
+    // Attempt to convert the returned string to a BigInteger
+    BigInteger prime = new BigInteger(primeString);
+
+    // Verify that the generated number is probably prime
+    assertTrue(prime.isProbablePrime(50), "Generated number is not prime");
   }
 }
