@@ -21,4 +21,14 @@ class HealthControllerIT extends FacadeIT {
     assertEquals(1, dummyTableEntries.size());
     assertEquals("dummy-table-id-1", dummyTableEntries.get(0).getId());
   }
+    @Test
+  void generateNewPrime() {
+    String primeString = healthController.generateNewPrime();
+
+    // Attempt to convert the returned string to a BigInteger
+    BigInteger prime = new BigInteger(primeString);
+
+    // Verify that the generated number is probably prime
+    assertTrue(prime.isProbablePrime(50), "Generated number is not prime");
+  }
 }
